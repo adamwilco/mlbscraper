@@ -10,23 +10,29 @@ const formatDate = (date) => {
 }
 
 const fs = require('fs');
+
+//set up the csv stream for writing data to file//
 var csv = require('fast-csv');
 const ws = fs.createWriteStream('./data.csv');
 const stream = csv.format();
 stream.pipe(ws);
+
+//make a header row for csv//
 stream.write([ 'date', 'temp', 'condition', 'wind', 'venue', 'batter_name', 'batter', 'stand', 'pitcher_name', 'pitcher', 'throws', 'events', 'description', 'des', 'home_team', 'away_team', 'year', 'type', 'game_type', 'gamepk', 'inning', 'topbot', 'abnum', 'id' ]);
 
-
+//these lines determine which dates to scrape//
 const today = new Date();
 const yesterday = new Date(today.setDate(today.getDate() - 1));
 const date = formatDate(yesterday);
 const url = scheduleurl (date, date)
 
+//fetch the gamepk data from the given dates//
   fetch(url)
     .then(res => res.json())
     .then(json => setGamepks(json) )
     .catch(err => console.error(err));
 
+//loop through each date to extract the game data//
 function setGamepks(data) {
   const gpks = [];
   for (let d = 0; d < data.dates.length; d++) {
@@ -36,11 +42,14 @@ function setGamepks(data) {
       gpks.push(games[g].gamePk);
     }
   }
+  
+  //removes duplicate gamepks//
   const gamepks = gpks.unique();
   
   next(gamepks);
 }
 
+//go through each gamepk, fetch data from the internet, send to the scrape function//
 function next(gamepks) {
   for (let game = 0; game < gamepks.length; game++) {
 
@@ -55,11 +64,18 @@ function next(gamepks) {
 }
 
 function scrape(data) {
+  //temporarily save chunks of data as "output" that will be written to file//
   let output = [];
+  
+  //check to see if the game is a completed regular season game, if not skip the game//
   const game_status = data.gameData.status.abstractGameState;
   const game_type = data.gameData.game.type;
   if (game_status !== "Final" && game_type === "R") { return }
+  
+  
   const gamepk = data.gameData.game.pk;
+  
+  //loop through the plays to grab desired data//
   for (let i = 0; i < data.liveData.plays.allPlays.length; i++) {
     const play = {}
     play.gamepk = gamepk;
@@ -87,23 +103,31 @@ function scrape(data) {
     play.inning = ab.about.inning;
     play.topbot = ab.about.halfInning;
     play.abnum = ab.atBatIndex;
+    
+    //in the event of no pitches thrown in a play, set place holder for pitches thrown//
+    //this is needed to ensure a unique id for each play//
     const pitchnum = (typeof ab.playEvents !== "undefined") ? ab.playEvents.length:1;
     
     play.pitchnum = pitchnum;
+    
+    //unique play ID//
     play.id = String(gamepk)+"-"+String(ab.matchup.batter.id)+"-"+String(ab.matchup.pitcher.id)+"-"+String(ab.about.inning) +"-"+ String(ab.atBatIndex) +"-"+ String(pitchnum);
+    
+    //push data to the output array//
     output.push( play );
   }
-
+  
+  //send output to be written to file//
   writeToFile(output);
 }
 
 
-
+//takes an array and writes each line to csv file//
 function writeToFile(data) {
   data.forEach( (row) => stream.write(row) );
 }
 
-
+//added functionality to array function to allow easy deletion of duplicates//
 Array.prototype.contains = function(v) {
   for (var i = 0; i < this.length; i++) {
     if (this[i] === v) return true;
