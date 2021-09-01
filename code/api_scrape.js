@@ -1,4 +1,6 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
+import fs from 'fs';
+import csv from 'fast-csv';
 
 const scheduleurl = (startDate, endDate) => "https://statsapi.mlb.com/api/v1/schedule?sportId=1&startDate="+startDate+"&endDate="+endDate;
 const gameurl = (gamepk) => "https://statsapi.mlb.com/api/v1.1/game/"+gamepk+"/feed/live";
@@ -9,10 +11,7 @@ const formatDate = (date) => {
   return `${year}-${month}-${day}`;
 }
 
-const fs = require('fs');
-
 //set up the csv stream for writing data to file//
-var csv = require('fast-csv');
 const ws = fs.createWriteStream('./data.csv');
 const stream = csv.format();
 stream.pipe(ws);
