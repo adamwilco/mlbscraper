@@ -120,53 +120,53 @@ function scrape(data) {
           if(pitch.isPitch) {
             play.MLB_playID = pitch.playId;
             try {
-            play.pitch_balls = (p-1 >= 0) ? ab.playEvents[p-1].count.balls:0;
-            play.pitch_strikes = (p-1 >= 0) ? ab.playEvents[p-1].count.strikes:0;
-            play.pitch_outs = (p-1 >= 0) ? ab.playEvents[p-1].count.outs:0;
-            play.pitch_call = pitch.details.description;
-            play.pitch_type = data.liveData.plays.allPlays[i].playEvents[p].details.type.code;
-            play.pitch_startSpeed = pitch.pitchData.startSpeed;
-            play.pitch_endSpeed = pitch.pitchData.endSpeed;
-            play.pitch_sz_top = pitch.pitchData.strikeZoneTop;
-            play.pitch_sz_bot = pitch.pitchData.strikeZoneBottom;
-            play.pitch_x0 = pitch.pitchData.coordinates.x0;
-            play.pitch_y0 = pitch.pitchData.coordinates.y0;
-            play.pitch_z0 = pitch.pitchData.coordinates.z0;
-            play.pitch_extension = pitch.pitchData.extension;
-            play.pitch_vx0 = pitch.pitchData.coordinates.vX0;
-            play.pitch_vy0 = pitch.pitchData.coordinates.vY0;
-            play.pitch_vz0 = pitch.pitchData.coordinates.vZ0;
-            play.pitch_ax = pitch.pitchData.coordinates.aX;
-            play.pitch_ay = pitch.pitchData.coordinates.aY;
-            play.pitch_az = pitch.pitchData.coordinates.aZ;
-            play.pitch_pfx_x = pitch.pitchData.coordinates.pfxX;
-            play.pitch_pfx_z = pitch.pitchData.coordinates.pfxZ;
-            play.pitch_px = pitch.pitchData.coordinates.pX;
-            play.pitch_pz = pitch.pitchData.coordinates.pZ;
-            play.pitch_x = pitch.pitchData.coordinates.x;
-            play.pitch_y = pitch.pitchData.coordinates.y;
-            play.pitch_px = pitch.pitchData.coordinates.pX;
-            play.pitch_pz = pitch.pitchData.coordinates.pZ;
-            play.pitch_breakAngle = pitch.pitchData.breaks.breakAngle;
-            play.pitch_breakLength = pitch.pitchData.breaks.breakLength;
-            play.pitch_break_y = pitch.pitchData.breaks.breakY;
-            play.pitch_spinrate = pitch.pitchData.breaks.spinRate;
-            play.pitch_breakDirection = pitch.pitchData.breaks.spinDirection;
-            play.pitch_zone = pitch.pitchData.zone;
-            play.pitch_plateTime = pitch.pitchData.plateTime;
-            play.pitchnum = pitchnum;
-            
-            if(pitch.details.isInPlay ) {
-              play.bip_EV = pitch.hitData.launchSpeed;
-              play.bip_VA = pitch.hitData.launchAngle;
-              play.bip_distance = pitch.hitData.totalDistance;
-              play.bip_type = pitch.hitData.trajectory;
-              play.bip_hardness = pitch.hitData.hardness;
-              play.bip_location = pitch.hitData.location;
-              play.bip_hc_x = pitch.hitData.coordinates.coordX;
-              play.bip_hc_y = pitch.hitData.coordinates.coordY;
-            }
-          } catch {}
+              play.pitch_balls = (p-1 >= 0) ? ab.playEvents[p-1].count.balls:0;
+              play.pitch_strikes = (p-1 >= 0) ? ab.playEvents[p-1].count.strikes:0;
+              play.pitch_outs = (p-1 >= 0) ? ab.playEvents[p-1].count.outs:0;
+              play.pitch_call = pitch.details.description;
+              play.pitch_type = data.liveData.plays.allPlays[i].playEvents[p].details.type.code;
+              play.pitch_startSpeed = pitch.pitchData.startSpeed;
+              play.pitch_endSpeed = pitch.pitchData.endSpeed;
+              play.pitch_sz_top = pitch.pitchData.strikeZoneTop;
+              play.pitch_sz_bot = pitch.pitchData.strikeZoneBottom;
+              play.pitch_x0 = pitch.pitchData.coordinates.x0;
+              play.pitch_y0 = pitch.pitchData.coordinates.y0;
+              play.pitch_z0 = pitch.pitchData.coordinates.z0;
+              play.pitch_extension = pitch.pitchData.extension;
+              play.pitch_vx0 = pitch.pitchData.coordinates.vX0;
+              play.pitch_vy0 = pitch.pitchData.coordinates.vY0;
+              play.pitch_vz0 = pitch.pitchData.coordinates.vZ0;
+              play.pitch_ax = pitch.pitchData.coordinates.aX;
+              play.pitch_ay = pitch.pitchData.coordinates.aY;
+              play.pitch_az = pitch.pitchData.coordinates.aZ;
+              play.pitch_pfx_x = pitch.pitchData.coordinates.pfxX;
+              play.pitch_pfx_z = pitch.pitchData.coordinates.pfxZ;
+              play.pitch_px = pitch.pitchData.coordinates.pX;
+              play.pitch_pz = pitch.pitchData.coordinates.pZ;
+              play.pitch_x = pitch.pitchData.coordinates.x;
+              play.pitch_y = pitch.pitchData.coordinates.y;
+              play.pitch_px = pitch.pitchData.coordinates.pX;
+              play.pitch_pz = pitch.pitchData.coordinates.pZ;
+              play.pitch_breakAngle = pitch.pitchData.breaks.breakAngle;
+              play.pitch_breakLength = pitch.pitchData.breaks.breakLength;
+              play.pitch_break_y = pitch.pitchData.breaks.breakY;
+              play.pitch_spinrate = pitch.pitchData.breaks.spinRate;
+              play.pitch_breakDirection = pitch.pitchData.breaks.spinDirection;
+              play.pitch_zone = pitch.pitchData.zone;
+              play.pitch_plateTime = pitch.pitchData.plateTime;
+              play.pitchnum = pitchnum;
+              
+              if(pitch.details.isInPlay ) {
+                play.bip_EV = pitch.hitData.launchSpeed;
+                play.bip_VA = pitch.hitData.launchAngle;
+                play.bip_distance = pitch.hitData.totalDistance;
+                play.bip_type = pitch.hitData.trajectory;
+                play.bip_hardness = pitch.hitData.hardness;
+                play.bip_location = pitch.hitData.location;
+                play.bip_hc_x = pitch.hitData.coordinates.coordX;
+                play.bip_hc_y = pitch.hitData.coordinates.coordY;
+              }
+            } catch {}
           }
           play.id = String(gamepk)+"-"+String(ab.matchup.batter.id)+"-"+String(ab.matchup.pitcher.id)+"-"+String(ab.about.inning) +"-"+ String(ab.atBatIndex) +"-"+ String(pitchnum);
           pitchnum++;
